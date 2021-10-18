@@ -1,0 +1,906 @@
+{
+    "基本資料": {
+        "id": "/基本資料",
+        "type": "object",
+        "properties": {
+            "就讀學校代碼": { "$ref": "/學校代碼" },
+            "就讀單位代碼": { "$ref": "/單位代碼" },
+            "就讀學校或單位名稱": { "type": "string", "minLength": 2, "maxLength": 100 },
+            "就讀學校所在縣市代碼": {
+                "enum": [
+                    "",
+                    "17",
+                    "30",
+                    "01",
+                    "03",
+                    "18",
+                    "04",
+                    "05",
+                    "66",
+                    "07",
+                    "08",
+                    "09",
+                    "20",
+                    "10",
+                    "67",
+                    "64",
+                    "13",
+                    "14",
+                    "15",
+                    "02",
+                    "16",
+                    "71",
+                    "72"
+                ]
+            },
+            "就讀學校網站": { "type": "string", "minLength": 0, "maxLength": 100, "pattern": "^$|^http|^www" },
+            "學生出生年月日": { "type": "string", "minLength": 7, "maxLength": 7, "pattern": "^[0][2-9][0-9][0-1][0-9][0-3][0-9]$" },
+            "部別代碼": {
+                "type": ["object", "null"],
+                "properties": {
+                    "代碼": { "type": "string", "minLength": 1, "maxLength": 1, "pattern": "^[1-7]$" },
+                    "名稱": { 
+                        "enum": [
+                            "日間部", "夜間部", "實用技能學程(日)", "實用技能學程(夜)", "進修部(學校)", "雙語部", "高職部"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": ["代碼", "名稱"]
+            },
+            "班別": {
+                "type": ["object", "null"],
+                "properties": {
+                    "代碼": { "type": "string", "minLength": 1, "maxLength": 2, "pattern": "^[1-9]$|^0(1|4)$|^n$|^y$" },
+                    "名稱": { 
+                        "enum": [
+                            "日間部(一般班)", "夜間部(一般班)", "實用技能學程(一般班)", "建教班", "產學訓合作計畫班(產學合作班)", "雙軌訓練旗艦計畫班(臺德菁英班)", "建教僑生專班", "實驗班", "進修部(核定班)", "進修部(員工進修班)", "非班混齡", "班混齡"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": ["代碼", "名稱"]
+            },
+            "群別代碼": {
+                "type": ["object", "null"],
+                "properties": {
+                    "代碼": { "type": "string", "minLength": 2, "maxLength": 2, "pattern": "^[1-9][0-9]$|^ {2}$|^00$" },
+                    "名稱": { "type": "string", "minLength": 0, "maxLength": 10, "pattern": "^$|^[\\u4e00-\\u9fa5]{2,5}群$|^其他$|^其他\\(綜合\\)$" }
+                },
+                "additionalProperties": false,
+                "required": ["代碼", "名稱"]
+            },
+            "科班學程別代碼": {
+                "type": ["object", "null"],
+                "properties": {
+                    "代碼": { "type": "string", "minLength": 3, "maxLength": 3, "pattern": "^[0-9A-Z][0-9][0-9A-Z]$|^ {3}$" },
+                    "名稱": { "type": "string", "minLength": 0, "maxLength": 10 }
+                },
+                "additionalProperties": false,
+                "required": ["代碼", "名稱"]
+            },
+            "實驗教育學生學習型態": { 
+                "enum": [
+                    "普通型態", "學校型態實驗教育", "非學校型態個人實驗教育", "非學校型態團體實驗教育", "非學校型態機構實驗教育", "公辦民營實驗教育", "其他"
+                ]
+             },
+            "國民身分證統一編號": { "type": "string", "maxLength": 20, "pattern": "^[0-9]{9}$|^[A-Z][0-9]{9}$|[A-Z]{2}[0-9]{8}|^[A-Z][0-9]{7}[A-Z]$|^F[0-9]{10}$|^L[0-9]{8}$|^j[0-9]{9}$" },
+            "學生中文姓名": { "type": "string", "maxLength": 100, "pattern": "^((?!{F).)+$" }
+        },
+        "additionalProperties": false,
+        "required": [
+            "就讀學校代碼",
+            "就讀單位代碼",
+            "就讀學校或單位名稱",
+            "就讀學校所在縣市代碼",
+            "就讀學校網站",
+            "學生出生年月日",
+            "部別代碼",
+            "班別",
+            "群別代碼",
+            "科班學程別代碼",
+            "實驗教育學生學習型態",
+            "國民身分證統一編號",
+            "學生中文姓名"
+        ]
+    },
+    "修課紀錄": {
+        "id": "修課紀錄",
+        "type": "object",
+        "properties": {
+            "學期成績與學習相對表現資訊": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "學年度": { "$ref": "/學年度" },
+                        "學期": { "type": "integer", "minimum": 1, "maximum": 2 },
+                        "學生學期成績": {
+                            "type": "number",
+                            "multipleOf": 0.1,
+                            "minimum": 0,
+                            "maximum": 100
+                        },
+                        "校學習相對表現資訊": {
+                            "type": "object",
+                            "properties": {
+                                "就讀學校資訊": {
+                                    "type": "object",
+                                    "properties": {
+                                        "代碼": { "$ref": "/學校代碼" },
+                                        "名稱": { "type": "string", "minLength": 2, "maxLength": 100 }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [
+                                        "代碼", "名稱"
+                                    ]
+                                },
+                                "母體人數": { "type": "integer", "minimum": 0, "maximum": 99999 },
+                                "分數級距分布": { "$ref": "/分數級距分布" }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "就讀學校資訊",
+                                "母體人數",
+                                "分數級距分布"
+                            ]
+                        },
+                        "群別學習相對表現資訊": {
+                            "type": "object",
+                            "properties": {
+                                "就讀群別資訊": {
+                                    "type": "object",
+                                    "properties": {
+                                        "代碼": { "type": "string", "minLength": 2, "maxLength": 2, "pattern": "^[1-9][0-9]$|^ {2}$|^00$" },
+                                        "名稱": { "type": "string", "minLength": 0, "maxLength": 10, "pattern": "^$|^[\\u4e00-\\u9fa5]{2,5}群$|^其他$|^其他\\(綜合\\)$" }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [
+                                        "代碼", "名稱"
+                                    ]
+                                },
+                                "母體人數": { "type": "integer", "minimum": 0, "maximum": 99999 },
+                                "分數級距分布": { "$ref": "/分數級距分布" }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "就讀群別資訊",
+                                "母體人數",
+                                "分數級距分布"
+                            ]
+                        },
+                        "科班學程別學習相對表現資訊": {
+                            "type": "object",
+                            "properties": {
+                                "就讀科班學程別資訊": {
+                                    "type": "object",
+                                    "properties": {
+                                        "代碼": { "type": "string", "minLength": 3, "maxLength": 3, "pattern": "^[0-9A-Z][0-9][0-9A-Z]$|^ {3}$" },
+                                        "名稱": { "type": "string", "minLength": 0, "maxLength": 10 }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [
+                                        "代碼", "名稱"
+                                    ]
+                                },
+                                "母體人數": { "type": "integer", "minimum": 0, "maximum": 99999 },
+                                "分數級距分布": { "$ref": "/分數級距分布" }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "就讀科班學程別資訊",
+                                "母體人數",
+                                "分數級距分布"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "學年度",
+                        "學期",
+                        "學生學期成績",
+                        "校學習相對表現資訊",
+                        "群別學習相對表現資訊",
+                        "科班學程別學習相對表現資訊"
+                    ]
+                }
+            },
+            "學習紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "實際修課學年度": { "$ref": "/學年度" },
+                        "實際修課學期": { "type": "integer", "minimum": 0, "maximum": 4 },
+                        "修課方式": {
+                            "enum": [
+                                -1, 1, 2, 3, 4, 5, 6, 7, 8, 9
+                            ]
+                        },
+                        "原修課_應修課學年度": {
+                            "enum": [
+                                -999, 108, 109
+                            ]
+                        },
+                        "原修課_應修課學期": { "type": "integer", "minimum": -1, "maximum": 4 },
+                        "課程代碼": { "$ref": "/課程代碼" },
+                        "科目名稱": { "$ref": "/科目名稱" },
+                        "課程大綱": { "$ref": "/課程大綱" },
+                        "學分數": { "$ref": "/學分數" },
+                        "課程類別": {
+                            "enum": [
+                                "", 
+                                "部定必修", 
+                                "校訂必修", 
+                                "選修-加深加廣選修", 
+                                "選修-補強性選修", 
+                                "選修-多元選修", 
+                                "選修-其他", 
+                                "校訂選修", 
+                                "團體活動時間", 
+                                "彈性學習時間", 
+                                "大學預修課程", 
+                                "基礎訓練", 
+                                "職前訓練", 
+                                "寒暑假課程", 
+                                "返校課程", 
+                                "職業技能訓練"
+                            ]
+                        },
+                        "課程領域資訊": {
+                            "type": ["object", "null"],
+                            "properties": {
+                                "代碼": { "type": "string", "minLength": 2, "maxLength": 2, "pattern": "^[0-9A-Z][0-9A-Z]$" },
+                                "名稱": { "type": "string", "minLength": 4, "maxLength": 20 }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "代碼",
+                                "名稱"
+                            ]
+                        },
+                        "開課年級": { "type": "integer", "minimum": 0, "maximum": 3 },
+                        "學業成績": {
+                            "type": "object",
+                            "properties": {
+                                "分數": { "type": "string", "maxLength": 5 },
+                                "及格": { "type": "integer", "minimum": -1, "maximum": 1 },
+                                "質性評語": { "type": "string", "maxLength": 1200 }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "分數",
+                                "及格",
+                                "質性評語"
+                            ]
+                        },
+                        "本科目分數級距分布": { 
+                            "oneOf": [
+                                { "type": "null" },
+                                { "$ref": "/分數級距分布" }
+                            ]
+                        },
+                        "母體人數": { "type": "integer", "minimum": -1, "maximum": 99999 }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "實際修課學年度",
+                        "實際修課學期",
+                        "修課方式",
+                        "原修課_應修課學年度",
+                        "原修課_應修課學期",
+                        "課程代碼",
+                        "科目名稱",
+                        "課程大綱",
+                        "學分數",
+                        "課程類別",
+                        "課程領域資訊",
+                        "開課年級",
+                        "學業成績",
+                        "本科目分數級距分布",
+                        "母體人數"
+                    ]
+                }
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "學期成績與學習相對表現資訊",
+            "學習紀錄"
+        ]
+    },
+    "課程學習成果": {
+        "id": "/課程學習成果",
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "修課學校資訊": {
+                    "type": ["object", "null"],
+                    "properties": {
+                        "代碼": { "$ref": "/學校代碼" },
+                        "名稱": { "type": "string", "minLength": 2, "maxLength": 25 }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "代碼",
+                        "名稱"
+                    ]
+                },
+                "修課單位資訊": {
+                    "type": ["object", "null"],
+                    "properties": {
+                        "代碼": { "$ref": "/單位代碼" },
+                        "名稱": { "type": "string", "minLength": 2, "maxLength": 50 }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "代碼",
+                        "名稱"
+                    ]
+                },
+                "實際修課學年度": { "$ref": "/學年度" },
+                "實際修課學期": { "type": "integer", "minimum": 0, "maximum": 4 },
+                "課程代碼": { "$ref": "/課程代碼" },
+                "科目名稱": { "$ref": "/科目名稱" },
+                "課程大綱": { "$ref": "/課程大綱" },
+                "學分數": { "$ref": "/學分數" },
+                "修課時年級": {
+                    "enum": [-1, 1, 2, 3]
+                },
+                "課程學習成果文件檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^課程學習成果\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                "文件檔案MD5": { "$ref": "/MD5" },
+                "課程學習成果影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^課程學習成果\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                "影音檔案MD5": { "$ref": "/MD5" },
+                "課程學習成果簡述": { "$ref": "/內容簡述" },
+                "內文相似度比對結果": { "type": "string", "maxLength": 0 },
+                "成果類別代碼": {
+                    "enum": ["1", "2"]
+                },
+                "GUID": { "$ref": "/GUID" }
+            },
+            "additionalProperties": false,
+            "required": [
+                "修課學校資訊",
+                "修課單位資訊",
+                "實際修課學年度",
+                "實際修課學期",
+                "課程代碼",
+                "科目名稱",
+                "課程大綱",
+                "學分數",
+                "修課時年級",
+                "課程學習成果文件檔案連結",
+                "文件檔案MD5",
+                "課程學習成果影音檔案連結",
+                "影音檔案MD5",
+                "課程學習成果簡述",
+                "內文相似度比對結果",
+                "成果類別代碼",
+                "GUID"
+            ]
+        }
+    },
+    "多元表現": {
+        "id": "/多元表現",
+        "type": "object",
+        "properties": {
+            "校方建立幹部經歷紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "擔任幹部期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "擔任幹部期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "單位名稱": { "type": "string", "minLength": 1, "maxLength": 50 },
+                        "開始日期": { "$ref": "/西元日期" },
+                        "結束日期": { "$ref": "/西元日期" },
+                        "擔任職務名稱": { "type": "string", "minLength": 1, "maxLength": 50 },
+                        "幹部等級代碼": { "enum": [1, 2, 3] },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "擔任幹部期間就讀學校代碼",
+                        "擔任幹部期間就讀單位代碼",
+                        "單位名稱",
+                        "開始日期",
+                        "結束日期",
+                        "擔任職務名稱",
+                        "幹部等級代碼",
+                        "GUID"
+                    ]
+                }
+            },
+            "幹部經歷暨事蹟紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "單位名稱": { "type": "string", "minLength": 1, "maxLength": 50 },
+                        "開始日期": { "$ref": "/西元日期" },
+                        "結束日期": { "$ref": "/西元日期" },
+                        "擔任職務名稱": { "type": "string", "minLength": 1, "maxLength": 50 },
+                        "幹部等級代碼": { "enum": [1, 2, 3, 4, 5, 9] },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/幹部經歷暨事蹟紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/幹部經歷暨事蹟紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "單位名稱",
+                        "開始日期",
+                        "結束日期",
+                        "擔任職務名稱",
+                        "幹部等級代碼",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            },
+            "競賽參與紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "競賽名稱": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "競賽等級代碼": { "enum": [1, 2, 3, 4] },
+                        "競賽獎項": { "type": "string", "maxLength": 50 },
+                        "結果公布日期": { "$ref": "/西元日期" },
+                        "項目": { "type": "string", "maxLength": 50 },
+                        "內容簡述": { "$ref": "/內容簡述"},
+                        "團體或個人參與代碼": { "enum": [1, 2] },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/競賽參與紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/競賽參與紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "競賽代碼": { "type": "string", "maxLength": 0},
+                        "競賽認證紀錄": { "type": "string", "maxLength": 0},
+                        "競賽統計資訊": { "type": "string", "maxLength": 0},
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "競賽名稱",
+                        "競賽等級代碼",
+                        "競賽獎項",
+                        "結果公布日期",
+                        "項目",
+                        "內容簡述",
+                        "團體或個人參與代碼",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "競賽代碼",
+                        "競賽認證紀錄",
+                        "競賽統計資訊",
+                        "GUID"
+                    ]
+                }
+            },
+            "檢定證照紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "證照資訊": {
+                            "type": "object",
+                            "properties": {
+                                "證照代碼": { "type": "string", "minLength": 4, "maxLength": 4, "pattern": "^[0-9A-Z]{4}$" },
+                                "證照區域": { "type": "string", "minLength": 2, "maxLength": 10 },
+                                "證照類別": { "type": "string", "minLength": 2, "maxLength": 20 },
+                                "證照發照單位": { "type": "string", "minLength": 2, "maxLength": 200 },
+                                "證照名稱": { "type": "string", "minLength": 2, "maxLength": 200 },
+                                "級數分數": { "type": "string", "minLength": 2, "maxLength": 300 }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "證照代碼",
+                                "證照區域",
+                                "證照類別",
+                                "證照發照單位",
+                                "證照名稱",
+                                "級數分數"
+                            ]
+                        },
+                        "證照類型代碼": { "enum": [1, 2, 3, 4] },
+                        "檢定結果分數": {
+                            "oneOf": [
+                                { "type": "number", "minimum": 0, "maximum": 999.99, "multipleOf": 0.01 },
+                                { "enum": [-999.99] }
+                            ]
+                        },
+                        "取得證照日期": { "$ref": "/西元日期" },
+                        "分項結果": { "type": "string"},
+                        "證照字號": { "type": "string", "maxLength": 50 },
+                        "檢定組別": { "type": "string", "maxLength": 50 },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/檢定證照紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/檢定證照紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "檢定認證紀錄": { "type": "string", "maxLength": 0},
+                        "檢定統計資訊": { "type": "string", "maxLength": 0},
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "證照資訊",
+                        "證照類型代碼",
+                        "檢定結果分數",
+                        "取得證照日期",
+                        "分項結果",
+                        "證照字號",
+                        "檢定組別",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "檢定認證紀錄",
+                        "檢定統計資訊",
+                        "GUID"
+                    ]
+                }
+            },
+            "服務學習紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "服務名稱": { "type": "string", "maxLength": 100 },
+                        "服務單位名稱": { "type": "string", "maxLength": 100 },
+                        "開始日期": { "$ref": "/西元日期" },
+                        "結束日期": { "$ref": "/西元日期" },
+                        "服務學習時數": {
+                            "oneOf": [
+                                { "type": "number", "minimum": 0, "maximum": 9999.999, "multipleOf": 0.001 },
+                                { "enum": [-9999.999] }
+                            ]
+                        },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/服務學習紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/服務學習紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "服務名稱",
+                        "服務單位名稱",
+                        "開始日期",
+                        "結束日期",
+                        "服務學習時數",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            },
+            "彈性學習時間紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "學年度": { "$ref": "/學年度" },
+                        "學期": { "type": "integer", "minimum": 0, "maximum": 4 },
+                        "彈性學習時間類別代碼": { "enum": [1, 2, 3, 4, 5] },
+                        "內容_開設名稱": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "開設單位": { "type": "string", "maxLength": 100 },
+                        "每週節數": { "type": "integer", "minLength": 1, "maxLength": 40 },
+                        "開設週數": { "type": "integer", "minLength": 1, "maxLength": 53 },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/彈性學習時間紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/彈性學習時間紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "學年度",
+                        "學期",
+                        "彈性學習時間類別代碼",
+                        "內容_開設名稱",
+                        "開設單位",
+                        "每週節數",
+                        "開設週數",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            },
+            "職場學習紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "職場學習類別代碼": { "enum": [1, 2, 3, 4] },
+                        "職場學習單位": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "職場學習職稱": { "type": "string", "maxLength": 100 },
+                        "開始日期": { "$ref": "/西元日期" },
+                        "結束日期": { "$ref": "/西元日期" },
+                        "時數": {
+                            "oneOf": [
+                                { "type": "number", "minimum": 0, "maximum": 9999.999, "multipleOf": 0.001 },
+                                { "enum": [-9999.999] }
+                            ]
+                        },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/職場學習紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/職場學習紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "職場學習類別代碼",
+                        "職場學習單位",
+                        "職場學習職稱",
+                        "開始日期",
+                        "結束日期",
+                        "時數",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            },
+            "作品成果紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "名稱": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "作品日期": { "$ref": "/西元日期" },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "作品成果連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/作品成果紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "作品成果MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/作品成果紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "名稱",
+                        "作品日期",
+                        "內容簡述",
+                        "作品成果連結",
+                        "作品成果MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            },
+            "團體活動時間紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "學年度": {
+                            "oneOf": [
+                                { "enum": [999] },
+                                { "$ref": "/學年度" }
+                            ]
+                        },
+                        "學期": { "type": "integer", "minimum": 0, "maximum": 2 },
+                        "開始日期": {
+                            "oneOf": [
+                                { "enum": [""] },
+                                { "$ref": "/西元日期" }
+                            ]
+                        },
+                        "結束日期": {
+                            "oneOf": [
+                                { "enum": [""] },
+                                { "$ref": "/西元日期" }
+                            ]
+                        },
+                        "團體活動時間類別代碼": { "enum": [1, 2, 3, 4, 5, 6] },
+                        "辦理單位": { "type": "string", "maxLength": 100 },
+                        "團體活動內容名稱": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "節數或時數": { "type": "number", "minimum": 0, "maximum": 999999999.999, "multipleOf": 0.001 },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/團體活動時間紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/團體活動時間紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "學年度",
+                        "學期",
+                        "開始日期",
+                        "結束日期",
+                        "團體活動時間類別代碼",
+                        "辦理單位",
+                        "團體活動內容名稱",
+                        "節數或時數",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            },
+            "其他多元表現紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "名稱": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "主辦單位": { "type": "string", "maxLength": 100 },
+                        "開始日期": { "$ref": "/西元日期" },
+                        "結束日期": { "$ref": "/西元日期" },
+                        "時數": {
+                            "oneOf": [
+                                { "type": "number", "minimum": 0, "maximum": 9999.999, "multipleOf": 0.001 },
+                                { "enum": [-9999.999] }
+                            ]
+                        },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/其他多元表現紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/其他多元表現紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "名稱",
+                        "主辦單位",
+                        "開始日期",
+                        "結束日期",
+                        "時數",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            },
+            "大學及技專校院先修課程紀錄": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "記錄期間就讀學校代碼": { "$ref": "/學校代碼" },
+                        "記錄期間就讀單位代碼": { "$ref": "/單位代碼" },
+                        "計畫專案": { "type": "string", "minLength": 0, "maxLength": 100 },
+                        "開設單位": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "課程名稱": { "type": "string", "minLength": 1, "maxLength": 100 },
+                        "開始日期": { "$ref": "/西元日期" },
+                        "結束日期": { "$ref": "/西元日期" },
+                        "學分數": { "type": "number", "minimum": 0, "maximum": 999.9, "multipleOf": 0.1},
+                        "總時數": {
+                            "oneOf": [
+                                { "type": "number", "minimum": 0, "maximum": 9999.999, "multipleOf": 0.001 },
+                                { "enum": [-9999.999] }
+                            ]
+                        },
+                        "內容簡述": { "$ref": "/內容簡述" },
+                        "證明文件連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/大學及技專校院先修課程紀錄\\/.*\\.(pdf|PDF|jpg|JPG|png|PNG|jpeg)$" },
+                        "證明文件MD5": { "$ref": "/MD5" },
+                        "影音檔案連結": { "type": "string", "maxLength": 200, "pattern": "^$|^多元表現\\/大學及技專校院先修課程紀錄\\/.*\\.(mp3|MP3|mp4|MP4)$"},
+                        "影音檔案MD5": { "$ref": "/MD5" },
+                        "外部影音連結": { "$ref": "/外部影音連結" },
+                        "GUID": { "$ref": "/GUID" }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "記錄期間就讀學校代碼",
+                        "記錄期間就讀單位代碼",
+                        "計畫專案",
+                        "開設單位",
+                        "課程名稱",
+                        "開始日期",
+                        "結束日期",
+                        "學分數",
+                        "總時數",
+                        "內容簡述",
+                        "證明文件連結",
+                        "證明文件MD5",
+                        "影音檔案連結",
+                        "影音檔案MD5",
+                        "外部影音連結",
+                        "GUID"
+                    ]
+                }
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "校方建立幹部經歷紀錄",
+            "幹部經歷暨事蹟紀錄",
+            "競賽參與紀錄",
+            "檢定證照紀錄",
+            "服務學習紀錄",
+            "彈性學習時間紀錄",
+            "職場學習紀錄",
+            "作品成果紀錄",
+            "團體活動時間紀錄",
+            "其他多元表現紀錄",
+            "大學及技專校院先修課程紀錄"
+        ]
+    }
+}
